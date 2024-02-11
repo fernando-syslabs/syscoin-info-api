@@ -1,4 +1,4 @@
-FROM blocknetdx/syscoin4:v4.3.0
+FROM blocknetdx/syscoin4:v4.4.0
 
 RUN apt-get update;
 
