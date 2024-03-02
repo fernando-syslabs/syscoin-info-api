@@ -137,7 +137,7 @@ const runNewBlockSubscription = () => {
       }, 1000);
     }, 3000);
   });
-  wsClient.connect("wss://blockbook.elint.services/websocket");
+  wsClient.connect("wss://blockbook.syscoin.org/websocket");
 };
 
 app.get("/totalsupply", (req, res) => {
