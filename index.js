@@ -31,10 +31,9 @@ const largeNumber = 1000000000000000000;
 const getSupply = async () => {
   const [supplyInfo, explorerData, nevmAdd] = await Promise.all([
     rpcServices(client.callRpc).getTxOutSetInfo().call(),
-    // fetch(
-    //  "https://explorer.syscoin.org/api?module=stats&action=coinsupply"
-    // ).then((resp) => resp.json()),
-    Promise.resolve(803168031.26123),
+     fetch(
+      "https://explorer-v5.syscoin.org/api?module=stats&action=coinsupply"
+     ).then((resp) => resp.json()),
     fetch(
       "https://explorer.syscoin.org/api?module=account&action=balance&address=0xA738a563F9ecb55e0b2245D1e9E380f0fE455ea1"
     ).then((resp) => resp.json()),
