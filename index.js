@@ -32,6 +32,10 @@ let lastRecordedError = {
 };
 const largeNumber = 1000000000000000000;
 
+const getUnixtimestamp = () => {
+  return Math.floor(Date.now() / 1000);
+}
+
 const getSupply = async () => {
   const [supplyInfo, explorerData, nevmAdd] = await Promise.all([
     rpcServices(client.callRpc).getTxOutSetInfo().call(),
@@ -68,7 +72,7 @@ const recordTotalSupply = () => {
   return getSupply().then((supply) => {
     if (supply > 0) {
       lastRecordedTotalSupply.value = supply;
-      lastRecordedTotalSupply.recordedAt = new Date().toUTCString();
+      lastRecordedTotalSupply.recordedAt = getUnixtimestamp();
       lastRecordedError.totalSupply = undefined;
     } else {
       lastRecordedError.totalSupply = supply;
@@ -81,7 +85,7 @@ const recordCirculatingSupply = () => {
   return getCirculatingSupply().then((supply) => {
     if (supply > 0) {
       lastRecordedCirculatingSupply.value = supply;
-      lastRecordedCirculatingSupply.recordedAt = new Date().toUTCString();
+      lastRecordedCirculatingSupply.recordedAt = getUnixtimestamp();
       lastRecordedError.circulatingSupply = undefined;
     } else {
       lastRecordedError.circulatingSupply = supply;
