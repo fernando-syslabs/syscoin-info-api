@@ -178,6 +178,10 @@ app.get("/triggerRecordSupply", async (req, res) => {
 
 app.get("/health", async (req, res) => {
   console.log("Health check", new Date());
+  res.send("OK");
+});
+
+app.get("/status", async (req, res) => {
   if (undefined !== lastRecordedError.circulatingSupply || undefined !== lastRecordedError.totalSupply) {
     res.json({
       status: "ERROR",
