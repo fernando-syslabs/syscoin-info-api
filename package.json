@@ -11,8 +11,7 @@
   "dependencies": {
     "@syscoin/syscoin-js": "^4.2.0",
     "express": "^4.18.2",
-    "node-fetch": "^2.6.7",
-    "websocket": "^1.0.34"
+    "axios": "^1.7.4"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
