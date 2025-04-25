@@ -3,6 +3,7 @@ const axios = require('axios');
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
+const CONFIGURATION = require("./config");
 
 let lastRecordedTotalSupply = {
   value: undefined,
@@ -78,7 +79,7 @@ const getSupply = async () => {
       "https://explorer-v5.syscoin.org/api?module=stats&action=coinsupply"
     ),
     explorerApi.get(
-      "https://explorer.syscoin.org/api?module=account&action=balance&address=0xA738a563F9ecb55e0b2245D1e9E380f0fE455ea1"
+      `https://explorer.syscoin.org/api?module=account&action=balance&address=${CONFIGURATION.SyscoinVaultManager}`
     )
   ]);
 
@@ -121,38 +122,11 @@ const getCirculatingSupply = async () => {
     throw new Error("Dependency Error: Total Supply unavailable");
   }
 
-  try {
-    const treasuryResponse = await explorerApi.get(
-      "https://explorer.syscoin.org/api?module=account&action=balance&address=0x94EBc5528bE5Ec6914B0d7366aF68aA4b6cB2696"
-    );
+  const treasuryBalance = 0; // Treasury is now factored into sys5 governance/utxo
+  const finalCirculatingSupply = lastRecordedTotalSupply.value - treasuryBalance;
 
-    // Validate treasury balance response
-    const treasuryData = treasuryResponse.data;
-    if (!treasuryData || treasuryData.status !== "1" || typeof treasuryData.result !== 'string') {
-      throw new Error(`Invalid treasury balance response structure or status: ${JSON.stringify(treasuryData)}`);
-    }
-    const treasuryBalanceWei = treasuryData.result;
-
-    const balanceInEther = parseFloat(treasuryBalanceWei) / largeNumber;
-    if (isNaN(balanceInEther)) throw new Error(`Could not parse treasuryBalanceWei: ${treasuryBalanceWei}`);
-    if (balanceInEther < 0) throw new Error(`Invalid treasury balance calculated: ${balanceInEther}`);
-
-    console.log(`Treasury Balance (SYS): ${balanceInEther}`);
-    const circulatingSupply = lastRecordedTotalSupply.value - balanceInEther;
-
-    if (isNaN(circulatingSupply)) throw new Error(`Circulating supply calculation resulted in NaN`);
-    if (circulatingSupply < -1) { // Allow small negative tolerance
-      throw new Error(`Calculated circulatingSupply is unexpectedly negative: ${circulatingSupply}`);
-    }
-    const finalCirculatingSupply = Math.max(0, circulatingSupply); // Clamp to 0
-
-    console.log("Circulating supply calculated successfully.");
-    return finalCirculatingSupply;
-  } catch (error) {
-    console.error(`Error in getCirculatingSupply: ${error.message}`);
-    if (error.response) console.error(" -> Axios Response Error Data:", error.response.data);
-    throw error; // Re-throw
-  }
+  console.log("Circulating supply calculated successfully.");
+  return finalCirculatingSupply;
 };
 
 const recordTotalSupply = async () => {
