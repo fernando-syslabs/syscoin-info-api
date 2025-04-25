@@ -33,6 +33,9 @@ Host: https://info.syscoin.org/
 - `SYSCOIN_CORE_RPC_PASSWORD` - password for auth to RPC
 - `SYSCOIN_CORE_RPC_USERNAME` - username for auth to RPC
 
+An `.env.example` is provided for convenience.
+
+
 You can generate password and username:
 
 ```bash
@@ -40,3 +43,8 @@ curl -sSL https://raw.githubusercontent.com/syscoin/syscoin/master/share/rpcauth
 ```
 
 For more information you can check it here: https://github.com/syscoin/docker-syscoin-core#usage
+
+## Syscoin Vault Manager
+
+Please refer to `config.js` for the current official address of SyscoinVaultManager contract.
+
